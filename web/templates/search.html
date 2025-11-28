@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Search Engine</title>
+    <style type="text/css">
+        /* 全局重置与基础样式 */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* 主容器 */
+        #container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 头部与搜索框 */
+        #header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        #header h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        form[name="search"] p {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        input[type="text"] {
+            width: 60%;
+            padding: 12px 15px;
+            font-size: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus {
+            border-color: #3498db;
+        }
+        input[type="submit"] {
+            padding: 12px 25px;
+            font-size: 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        input[type="submit"]:hover {
+            background-color: #2980b9;
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid #eee;
+            margin: 20px 0;
+        }
+
+        /* 搜索结果列表 */
+        .result-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        /* 标题 */
+        .result-title {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        .result-title a {
+            color: #1a0dab;
+            text-decoration: none;
+        }
+        .result-title a:hover {
+            text-decoration: underline;
+        }
+
+        /* 元数据（URL 和 时间） */
+        .result-meta {
+            font-size: 13px;
+            color: #006621; /* 类似 Google 的 URL 绿色 */
+            margin-bottom: 5px;
+        }
+        .result-time {
+            color: #70757a;
+            margin-right: 8px;
+        }
+
+        /* 摘要 */
+        .result-snippet {
+            font-size: 14px;
+            color: #4d5156;
+            text-align: justify;
+        }
+
+        /* 错误/无结果提示 */
+        .no-result {
+            text-align: center;
+            color: #666;
+            margin-top: 50px;
+        }
+
+        /* AI总结区域样式 */
+        .ai-summary-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0 30px 0;
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .ai-summary-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .ai-summary-header h3 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 600;
+            color: white;
+        }
+        .ai-summary-label {
+            font-size: 12px;
+            opacity: 0.9;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+        .ai-summary-content {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 18px;
+            border-radius: 8px;
+            line-height: 1.8;
+            font-size: 15px;
+            text-align: justify;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* 分页 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 5px;
+            list-style: none;
+            margin-top: 30px;
+            padding: 0;
+        }
+        .pagination a {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+            color: #3498db;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        .pagination a:hover {
+            background-color: #f1f1f1;
+            border-color: #bbb;
+        }
+
+        /* 页脚 */
+        #footer {
+            margin-top: auto;
+            text-align: center;
+            font-size: 13px;
+            color: #999;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="header">
+            <h1>News Search Engine</h1>
+            <form name="search" action="/search/" method="POST">
+                <p>
+                    {% if key %}
+                        <input type="text" name="key_word" value="{{key}}" placeholder="请输入关键词...">
+                    {% else %}
+                        <input type="text" name="key_word" placeholder="请输入关键词...">
+                    {% endif %}
+                    <input type="submit" value="搜 索">
+                </p>
+            </form>
+        </div>
+        
+        <!-- 高级搜索块预留 -->
+        {% block high_search%}
+        {% endblock %}
+
+        <hr/>
+
+        <!-- AI总结区域 - 显示在搜索框下方，搜索结果上方 -->
+        {% if ai_summary and ai_summary|trim %}
+        <div class="ai-summary-container">
+            <div class="ai-summary-header">
+                <h3>🤖 AI智能总结</h3>
+                <span class="ai-summary-label">基于搜索关键词和相关新闻生成</span>
+            </div>
+            <div class="ai-summary-content">
+                {{ ai_summary|safe }}
+            </div>
+        </div>
+        <hr style="margin: 20px 0;"/>
+        {% endif %}
+
+        {% if error %}
+            <div class="results-container">
+                {% for doc in docs %}
+                <div class="result-item">
+                    <div class="result-title">
+                        <a href="/search/{{doc.id}}/" target="_blank">{{doc.title}}</a>
+                    </div>
+                    <div class="result-meta">
+                        <span class="result-time">{{doc.time}}</span>
+                        <a href="{{ doc.url }}" target="_blank" style="color: inherit; text-decoration: none;">{{doc.url}}</a>
+                    </div>
+                    <div class="result-snippet">
+                        {{doc.snippet}}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            {% block next %}
+            <ul class="pagination">
+                {% for i in page %}
+                    <li><a href="/search/page/{{i}}/">{{i}}</a></li>
+                {% endfor %}
+            </ul>
+            {% endblock %}
+
+        {% else %}
+            <div class="no-result">
+                <p>🔍 对不起，没有找到您搜索的网页！</p>
+                <p>请尝试减少关键词或使用更常见的词汇。</p>
+            </div>
+        {% endif %}
+		
+		<div id="footer">
+			<hr>
+            &copy; 
+			<script type="text/javascript">
+                var today = new Date();
+                var year = today.getFullYear();
+                document.write(year);
+			</script>
+            News Search Engine - Powered by Flask & Jieba
+        </div>
+		
+    </div>
+</body>
+</html>
