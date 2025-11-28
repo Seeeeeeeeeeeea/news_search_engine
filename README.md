@@ -76,14 +76,14 @@ python main.py
 
 项目根目录下的 `config.ini` 控制了核心参数。
 
-默认提供的 `config.ini` 使用相对路径（相对于项目根目录），例如 `./data/news/`。如果你希望将数据存放到其他位置，也可以将这些路径改为绝对路径。
+默认提供的 `config.ini` 使用相对路径（相对于 `web/` 目录），例如 `../data/news/`。如果你希望将数据存放到其他位置，也可以将这些路径改为绝对路径。
 
 ### 基础配置
 ```ini
 [DEFAULT]
-doc_dir_path = ./data/news/       # 新闻数据存储路径
-db_path = ./data/ir.db            # 数据库路径
-stop_words_path = ./data/stop_words.txt
+doc_dir_path = ../data/news/       # 新闻数据存储路径（相对于 web/ 目录）
+db_path = ../data/ir.db            # 数据库路径
+stop_words_path = ../data/stop_words.txt
 # BM25 算法参数 (根据语料调整)
 k1 = 1.5
 b = 0.75

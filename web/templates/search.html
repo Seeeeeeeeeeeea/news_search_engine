@@ -197,6 +197,7 @@
             font-size: 13px;
             color: #999;
             padding-top: 20px;
+            padding-bottom: 20px; /* 稍微增加底部padding */
         }
     </style>
 </head>
@@ -269,6 +270,7 @@
             </div>
         {% endif %}
 		
+        <!-- 修改后的页脚 -->
 		<div id="footer">
 			<hr>
             &copy; 
@@ -277,7 +279,9 @@
                 var year = today.getFullYear();
                 document.write(year);
 			</script>
-            News Search Engine - Powered by Flask & Jieba
+            News Search Engine 
+            - Developed by <strong>Jiahao Yang</strong> - 
+            Powered by Flask & Jieba
         </div>
 		
     </div>
