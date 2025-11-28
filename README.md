@@ -76,6 +76,8 @@ python main.py
 
 项目根目录下的 `config.ini` 控制了核心参数。
 
+默认提供的 `config.ini` 使用相对路径（相对于项目根目录），例如 `./data/news/`。如果你希望将数据存放到其他位置，也可以将这些路径改为绝对路径。
+
 ### 基础配置
 ```ini
 [DEFAULT]
@@ -96,7 +98,7 @@ enabled = true                    # true 开启, false 关闭
 api_type = openai                 # 可选: openai 或 modelscope
 api_base = https://api.openai.com/v1
 api_key = your_api_key_here       # 填入你的 API Key
-model = gpt-3.5-turbo             # 模型名称
+model = your_ai_model            # 模型名称
 ```
 
 ## 📂 项目结构
