@@ -10,8 +10,11 @@
 旨在演示小规模中文语料的全文检索、TF-IDF/BM25 排序算法以及大模型应用能力。
 
 如果本项目对你有帮助，欢迎点个 ⭐ **Star** 支持！
+<p align="center">
+  <img src="show1.jpg" width="45%" />
+  <img src="show2.jpg" width="45%" />
+</p>
 
----
 
 ## ✨ 功能概览
 
