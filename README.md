@@ -46,13 +46,22 @@ pip install -r requirements.txt
 
 ### 2. 数据初始化 (重要)
 
-首次运行前，需执行初始化脚本以爬取数据、构建倒排索引并生成推荐数据库：
+首次运行前，请按下列顺序执行：
 
-```bash
+1. 先运行爬虫脚本，默认爬取最近 5 天的新闻：
+
+```powershell
 # 确保根目录下 config.ini 已配置正确
+python code/spider.chinanews.com.py
+```
+
+2. 然后执行一键初始化脚本，自动构建索引并生成推荐数据：
+
+```powershell
 python code/setup.py
 ```
-> **提示**：该脚本会自动执行爬虫 (`spider.chinanews.com.py`) 和索引构建 (`index_module.py`)。
+
+提示：`code/spider.chinanews.com.py` 脚本默认会抓取最近 5 天（脚本内有 `timedelta(days=-5)`），如需更改抓取时间范围，请在脚本中调整 `start_date`/`end_date` 的计算方式。
 
 ### 3. 启动服务
 
