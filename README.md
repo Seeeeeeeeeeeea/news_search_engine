@@ -11,8 +11,8 @@
 
 如果本项目对你有帮助，欢迎点个 ⭐ **Star** 支持！
 <p align="center">
-  <img src="show1.png" width="45%" />
-  <img src="show2.png" width="45%" />
+  <img src="show1.jpg" width="45%" />
+  <img src="show2.jpg" width="45%" />
 </p>
 ---
 
