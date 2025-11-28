@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Updated Setup Script (2025)
-作者: 根据你的原版修改
-"""
+
 
 from spider import get_news_pool
 from spider import crawl_news
